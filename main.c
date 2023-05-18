@@ -3,11 +3,11 @@
 #include <stdio.h>
 
 // Configure stuff here
-const int bitmap_width = 128 + 8;  // Width of the bitmap file
-const int bitmap_height = 64 + 4;  // Height of the bitmap file
+const int bitmap_width = 128;      // Width of the bitmap file
+const int bitmap_height = 64 + 24; // Height of the bitmap file
 const int characters_per_row = 16; // How many columns should the bitmap have
 const int spacing_x = 8;           // Horizontal character spacing
-const int spacing_y = 9;           // Vertical character spacing
+const int spacing_y = 11;          // Vertical character spacing
 const int pointsize = 12;          // Font point size
 const char *fontfile = "m8stealth89.ttf"; // Font file to open
 const char *outfile = "font.bmp";         // Name of the resulting bitmap file
@@ -33,7 +33,8 @@ int main(int argc, char **argv) {
   // Set the color of the text (white)
   SDL_Color White = {255, 255, 255};
 
-  int column = 0;
+  // Offset the column by 1 to avoid attempting to render ASCII code 0
+  int column = 1;
   int row = 0;
   SDL_Surface *surfaceMessage;
   SDL_Texture *Message;
@@ -44,7 +45,7 @@ int main(int argc, char **argv) {
   SDL_SetRenderTarget(renderer, maintex);
 
   // Render a range of ASCII letters. Visible letters start from 32 (space).
-  for (int i = 33; i < 127; i++) {
+  for (int i = 1; i < 127; i++) {
     char ascii[2];
     sprintf(ascii, "%c", i);
     // printf("%c", i); // Uncomment to print the character list in console
@@ -62,7 +63,7 @@ int main(int argc, char **argv) {
     // Copy the rendered character into main texture
     SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
     column++;
-    if (column > characters_per_row) {
+    if (column >= characters_per_row) {
       column = 0;
       row++;
     }
